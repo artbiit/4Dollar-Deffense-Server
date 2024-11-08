@@ -9,8 +9,10 @@ import {
 import { CLIENT_VERSIONS } from '../constants/constants.js';
 import env from '../constants/env.js';
 import { REDIS_MATCH_REQUEST_CHANNEL } from '../constants/redis.js';
+import { ASSET_TYPE } from '../constants/assets.js';
 
 const configs = {
+  ASSET_TYPE,
   GlobalFailCode,
   RESPONSE_SUCCESS_CODE,
   CLIENT_VERSIONS,

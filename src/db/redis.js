@@ -7,6 +7,7 @@ const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } = configs;
 const LOCK_DEFAULT_TTL = '5000'; //밀리초 기본 락 유지시간
 
 let redis = null;
+let subscriberRedis = null;
 
 /**
  * 레디스에 연결을 시도합니다. 만약, 연결 실패시 에러를 던집니다.
@@ -21,19 +22,40 @@ export const connect = async () => {
         password: REDIS_PASSWORD,
       });
 
-      // Redis 연결 실패 이벤트 핸들러
       redis.on('error', (err) => {
         logger.error(`Redis connection failed: ${err}`);
-        redis = null; // 연결 실패 시 redis 객체를 null로 설정
+        redis = null;
       });
 
-      redis.on('message', async (channel, message) => {
-        logger.info(`Redis received publish[${channel}] => ${message}`);
-      });
-      logger.info('redis connected');
+      logger.info('Redis connected');
     } catch (e) {
       logger.error(`Redis connection failed, ${e}`);
       redis = null;
+      throw e;
+    }
+  }
+
+  if (subscriberRedis === null) {
+    try {
+      subscriberRedis = new Redis({
+        host: REDIS_HOST,
+        port: REDIS_PORT,
+        password: REDIS_PASSWORD,
+      });
+
+      subscriberRedis.on('error', (err) => {
+        logger.error(`Subscriber Redis connection failed: ${err}`);
+        subscriberRedis = null;
+      });
+
+      subscriberRedis.on('message', (channel, message) => {
+        logger.info(`Redis received publish[${channel}] => ${message}`);
+      });
+
+      logger.info('Subscriber Redis connected');
+    } catch (e) {
+      logger.error(`Subscriber Redis connection failed, ${e}`);
+      subscriberRedis = null;
       throw e;
     }
   }
@@ -51,6 +73,14 @@ export const getRedis = async () => {
   }
 
   return redis;
+};
+
+export const getSubscriberRedis = async () => {
+  if (subscriberRedis === null) {
+    logger.warn('Subscriber Redis is null. It will try to connect');
+    await connect();
+  }
+  return subscriberRedis;
 };
 
 /** 레디스 락 요청  */

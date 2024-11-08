@@ -38,3 +38,8 @@ export const cacheUserToken = async (seqNo, token) => {
     timeConversion(JWT_EXPIRES_IN) + 60,
   );
 };
+
+export const unlinkUserToken = async (seqNo) => {
+  const redis = await getRedis();
+  return await redis.unlink(`user:${seqNo}:accessToken`);
+};

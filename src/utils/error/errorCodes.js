@@ -11,6 +11,7 @@ export const ErrorCodes = {
   GAME_NOT_FOUND: 10009,
   ALREADY_INIT_USER: 10010,
   USER_NOT_IN_GAME: 10011,
+  INVALID_ASSET: 10012,
   // 추가적인 에러 코드들
 };
 

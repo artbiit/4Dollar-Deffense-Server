@@ -51,7 +51,7 @@ const towerPurchaseHandler = ({ socket, payload }) => {
     opponentSocket.write(addEnemyTowerResponse);
 
     // 타워 설치 응답 패킷 전송
-    const towerPurchaseResponseData = { towerId: tower.id };
+    const towerPurchaseResponseData = { towerId: tower.instanceId };
     const result = new Result(towerPurchaseResponseData, PacketType.TOWER_PURCHASE_RESPONSE);
     return result;
   } catch (error) {

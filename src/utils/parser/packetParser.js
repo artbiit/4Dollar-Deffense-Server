@@ -13,10 +13,10 @@ export const packetParser = (socket, packetType, version, sequence, payloadBuffe
     throw new CustomError(GlobalFailCode.INVALID_REQUEST, 'VERSION_MISMATCH');
   }
 
-  const user = getUserBySocket(socket);
-  if (user && user.sequence !== sequence) {
-    throw new CustomError(GlobalFailCode.INVALID_REQUEST, 'INVALID_SEQUENCE');
-  }
+  // const user = getUserBySocket(socket);
+  // if (user && user.sequence !== sequence) {
+  //   throw new CustomError(GlobalFailCode.INVALID_REQUEST, 'INVALID_SEQUENCE');
+  // }
 
   const protoMessages = getProtoMessages();
   // 핸들러 ID에 따라 적절한 payload 구조를 디코딩

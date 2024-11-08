@@ -5,6 +5,7 @@ import { GlobalFailCode } from '../constants/handlerIds.js';
 import { cacheUserToken, findUserByIdPw } from '../db/user/user.db.js';
 import { handleError } from '../utils/error/errorHandler.js';
 import Result from './result.js';
+import { addUser } from '../session/user.session.js';
 
 // 환경 변수에서 설정 불러오기
 const { JWT_SECRET, JWT_EXPIRES_IN, JWT_ALGORITHM, JWT_ISSUER, JWT_AUDIENCE, PacketType } = configs;
@@ -18,7 +19,7 @@ const { JWT_SECRET, JWT_EXPIRES_IN, JWT_ALGORITHM, JWT_ISSUER, JWT_AUDIENCE, Pac
  * @param {string} param.payload.password - 유저의 비밀번호
  * @returns {void} 별도의 반환 값은 없으며, 성공 여부와 메시지를 클라이언트에게 전송.
  */
-export const loginRequestHandler = async ({ payload }) => {
+export const loginRequestHandler = async ({ socket, payload }) => {
   const { id, password } = payload;
 
   // response data init
@@ -38,8 +39,10 @@ export const loginRequestHandler = async ({ payload }) => {
         issuer: JWT_ISSUER,
         audience: JWT_AUDIENCE,
       });
+
       // 토큰 캐싱
-      await cacheUserToken(userByDB.seqNo, token);
+      await addUser(socket, userByDB, token);
+
       // 성공 메시지
       message = '로그인에 성공 했습니다.';
       logger.info(`로그인 성공 : ${userByDB.seqNo}`);

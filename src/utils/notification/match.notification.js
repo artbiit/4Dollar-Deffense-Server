@@ -1,3 +1,9 @@
+import { getGameAssets } from '../../init/loadAssets.js';
+import makeNotification from './makeNotification.js';
+import configs from '../../configs/configs.js';
+import logger from '../logger.js';
+import { createResponse } from '../response/createResponse.js';
+const { PacketType } = configs;
 /**
  * message S2CMatchStartNotification {
     InitialGameState initialGameState = 1;
@@ -24,6 +30,48 @@ message GameState {
   Position basePosition = 9;
 }
   
+message BaseData {
+  int32 hp = 1;
+  int32 maxHp = 2;
+}
  * 
  */
-export const createMatchNotification = () => {};
+export const matchSuccessNotification = async (gameSession) => {
+  let gameUser = null;
+  try {
+    const users = gameSession.users;
+
+    const { bases, towers } = getGameAssets();
+    const initialGameState = {
+      baseHp: bases.data[0].maxHp,
+      towerCost: towers.data[0].Cost,
+      initialGold: 0,
+      monsterSpawnInterval: gameSession.monsterSpawnInterval,
+    };
+
+    const keys = Object.keys(users);
+
+    for (let i = 0; i <= users.length; i++) {
+      if (keys[i] == 'length') {
+        continue;
+      }
+      gameUser = users[keys[i]];
+      const user = gameUser.user;
+      const socket = user.socket;
+      const playerData = gameSession.getPlayerData(user.id);
+
+      const opponent = gameSession.getOpponent(user.id);
+      const opponentData = gameSession.getPlayerData(opponent.user.id);
+
+      const buffer = createResponse(PacketType.MATCH_START_NOTIFICATION, user, {
+        initialGameState,
+        playerData,
+        opponentData,
+      });
+      socket.write(buffer);
+    }
+  } catch (error) {
+    let userData = gameUser ? JSON.stringify(gameUser) : '';
+    logger.error(`matchSuccessNotification. failed notification : ${error} : ${userData}`);
+  }
+};
