@@ -17,6 +17,7 @@ const { PacketType } = configs;
 //  nowHp -= result;
 export const towerAttackRequestHandler = ({ socket, payload }) => {
   try {
+    console.log('00000000');
     // 1. payload에 있는 monsterId 와 towerId를 빼낸다.
     const { monsterId, towerId } = payload;
 
@@ -71,6 +72,7 @@ export const towerAttackRequestHandler = ({ socket, payload }) => {
 // 몬스터가 base에 도달하면 대미지 주고 remove되고 있음. 하지만 remove될때 서버에 보내는건 없음.
 export const monsterAttackBaseRequestHandler = ({ socket, payload }) => {
   try {
+    console.log('11111111');
     // 1. payload에 있는 damage를 빼낸다.
     const { damage } = payload;
 

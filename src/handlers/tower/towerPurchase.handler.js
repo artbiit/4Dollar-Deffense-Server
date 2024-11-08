@@ -18,6 +18,7 @@ const { PacketType } = configs;
  */
 const towerPurchaseHandler = ({ socket, payload }) => {
   try {
+    console.log('22222222');
     const { x, y } = payload;
 
     // 검증: 유저가 존재함
