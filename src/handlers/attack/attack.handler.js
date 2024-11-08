@@ -58,9 +58,9 @@ export const towerAttackRequestHandler = ({ socket, payload }) => {
 
     opponentSocket.write(notification);
 
-    // 상태동기화
-    const stateSyncOpponentSocket = game.getOpponent(userId);
-    stateSyncOpponentSocket.write(stateSyncNotification(game.getPlayerData(userId)));
+    // // 상태동기화
+    // const stateSyncOpponentSocket = game.getOpponent(userId);
+    // stateSyncOpponentSocket.write(stateSyncNotification(game.getPlayerData(userId)));
   } catch (error) {
     handleError(PacketType.TOWER_ATTACK_REQUEST, error);
   }
@@ -97,9 +97,9 @@ export const monsterAttackBaseRequestHandler = ({ socket, payload }) => {
     // 여기까지 몬스터가 base에게 대미지를 주었다.
     logger.info(`몬스터가 base에게 성공적으로 공격했습니다. 피해량 : ${damage}`);
 
-    // 상태동기화
-    const stateSyncOpponentSocket = game.getOpponent(userId);
-    stateSyncOpponentSocket.write(stateSyncNotification(game.getPlayerData(userId)));
+    // // 상태동기화
+    // const stateSyncOpponentSocket = game.getOpponent(userId);
+    // stateSyncOpponentSocket.write(stateSyncNotification(game.getPlayerData(userId)));
   } catch (error) {
     handleError(PacketType.MONSTER_ATTACK_BASE_REQUEST, error);
   }

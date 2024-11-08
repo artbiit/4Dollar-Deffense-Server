@@ -53,9 +53,9 @@ const towerPurchaseHandler = ({ socket, payload }) => {
     const towerPurchaseResponseData = { towerId: tower.instanceId };
     const result = new Result(towerPurchaseResponseData, PacketType.TOWER_PURCHASE_RESPONSE);
 
-    // 상태동기화
-    const stateSyncOpponentSocket = gameSession.getOpponent(user.id);
-    stateSyncOpponentSocket.write(stateSyncNotification(gameSession.getPlayerData(user.id)));
+    // // 상태동기화
+    // const stateSyncOpponentSocket = gameSession.getOpponent(user.id);
+    // stateSyncOpponentSocket.write(stateSyncNotification(gameSession.getPlayerData(user.id)));
     return result;
   } catch (error) {
     handleError(PacketType.TOWER_PURCHASE_REQUEST, error);

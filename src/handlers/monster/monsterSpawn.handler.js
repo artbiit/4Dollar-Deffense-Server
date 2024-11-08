@@ -40,9 +40,9 @@ export const spawnMonsterRequestHandler = ({ socket, payload }) => {
       const opponentUser = game.getOpponent(user.id);
       opponentUser.user.socket.write(notification);
 
-      // 상태동기화
-      const stateSyncOpponentUser = game.getOpponent(user.id);
-      stateSyncOpponentUser.user.socket.write(stateSyncNotification(game.getPlayerData(user.id)));
+      // // 상태동기화
+      // const stateSyncOpponentUser = game.getOpponent(user.id);
+      // stateSyncOpponentUser.user.socket.write(stateSyncNotification(game.getPlayerData(user.id)));
 
       return new Result({ monsterId, monsterNumber }, PacketType.SPAWN_MONSTER_RESPONSE);
     }
