@@ -1,37 +1,26 @@
-import logger from '../utils/logger.js';
+import { PacketType } from '../../constants/header.js';
+import makeNotification from './makeNotification.js';
 
-// int32 userGold = 1;
-export const stateSyncUserGold = async (userGold, user) => {
+/**
+ * 기지 HP 상태 변경 중계 패킷 (S2CUpdateBaseHPNotification)
+ * @param {number} userGold
+ * @param {number} baseHp
+ * @param {number} monsterLevel
+ * @param {number} score
+ * @param {TowerData} towers
+ * @param {MonsterData} monsters
+ * @returns
+ */
+export const stateSyncNotification = async (
+  userGold,
+  baseHp,
+  monsterLevel,
+  score,
+  towers,
+  monsters,
+  user,
+) => {
   const packetType = PacketType.STATE_SYNC_NOTIFICATION;
-  return makeNotification(packetType, payload, user);
-};
-
-// int32 baseHp = 2;
-export const stateSyncBaseHp = async (baseHp, user) => {
-  const packetType = PacketType.STATE_SYNC_NOTIFICATION;
-  return makeNotification(packetType, payload, user);
-};
-
-// int32 monsterLevel = 3;
-export const stateSyncMonsterLevel = async (monsterLevel, user) => {
-  const packetType = PacketType.STATE_SYNC_NOTIFICATION;
-  return makeNotification(packetType, payload, user);
-};
-
-// int32 score = 4;
-export const stateSyncScore = async (score, user) => {
-  const packetType = PacketType.STATE_SYNC_NOTIFICATION;
-  return makeNotification(packetType, payload, user);
-};
-
-// repeated TowerData towers = 5;
-export const stateSyncTowers = async (towers, user) => {
-  const packetType = PacketType.STATE_SYNC_NOTIFICATION;
-  return makeNotification(packetType, payload, user);
-};
-
-// repeated MonsterData monsters = 6;
-export const stateSyncMonsters = async (monsters, user) => {
-  const packetType = PacketType.STATE_SYNC_NOTIFICATION;
+  const payload = { userGold, baseHp, monsterLevel, score, towers, monsters };
   return makeNotification(packetType, payload, user);
 };
