@@ -9,7 +9,7 @@ class Monster {
 
     const monsterId = `MON${String(monsterNumber).padStart(5, '0')}`;
     const monsters = getGameAsset(ASSET_TYPE.MONSTER);
-    const monsterData = monsters.find((monster) => monster.id === monsterId);
+    const monsterData = monsters.data.find((monster) => monster.id === monsterId);
     if (!monsterData) throw new Error(`${monsterId}라는 몬스터가 존재하지 않습니다.`);
 
     this.monsterId = monsterId;

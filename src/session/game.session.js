@@ -25,7 +25,7 @@ export const getGameSession = (id) => {
 };
 
 export const addMonsterToGameSession = (socket, monsterNumber) => {
-  const session = getGameSession(socket);
+  const session = getGameSessionBySocket(socket);
   const user = getUserBySocket(socket);
   if (session && user) {
     return session.addMonster(user.id, monsterNumber);

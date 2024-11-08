@@ -1,4 +1,4 @@
-import { addMonsterToGameSession, getGameSessionByUser } from '../../session/game.session.js';
+import { addMonsterToGameSession, getGameSessionBySocket } from '../../session/game.session.js';
 import { getUserBySocket } from '../../session/user.session.js';
 import { stateSyncNotification } from '../../utils/notification/stateSync.notification.js';
 import CustomError from '../../utils/error/customError.js';
@@ -6,6 +6,7 @@ import { ErrorCodes } from '../../utils/error/errorCodes.js';
 import { handleError } from '../../utils/error/errorHandler.js';
 import config from '../../configs/configs.js';
 import Result from '../result.js';
+import { monsterSpawnNotification } from '../../utils/notification/monster.notification.js';
 
 const { PacketType } = config;
 
@@ -18,8 +19,8 @@ export const spawnMonsterRequestHandler = ({ socket, payload }) => {
     }
 
     // 검증: 유저가 게임에 참가함
-    const gameSession = getGameSessionByUser(user);
-    if (!gameSession) {
+    const game = getGameSessionBySocket(socket);
+    if (!game) {
       throw new CustomError(ErrorCodes.USER_NOT_IN_GAME, '유저가 플레이중인 게임이 없습니다.');
     }
 
@@ -29,12 +30,19 @@ export const spawnMonsterRequestHandler = ({ socket, payload }) => {
     // 게임 세션에 몬스터 추가
     const monsterId = addMonsterToGameSession(socket, monsterNumber);
 
+    // 몬스터 스폰 응답 패킷 전송(S2CSpawnMonsterResponse)
     if (monsterId) {
       console.log(`몬스터 추가 됨 : ${monsterId}`);
 
+      // 상대 몬스터 Notification 패킷 전송(S2CSpawnEnemymonsterNotification)
+      const notification = monsterSpawnNotification(monsterId, monsterNumber, user);
+
+      const opponentUser = game.getOpponent(user.id);
+      opponentUser.user.socket.write(notification);
+
       // 상태동기화
-      const stateSyncOpponentSocket = gameSession.getOpponent(user.id);
-      stateSyncOpponentSocket.write(stateSyncNotification(gameSession.getPlayerData(user.id)));
+      const stateSyncOpponentUser = game.getOpponent(user.id);
+      stateSyncOpponentUser.user.socket.write(stateSyncNotification(game.getPlayerData(user.id)));
 
       return new Result({ monsterId, monsterNumber }, PacketType.SPAWN_MONSTER_RESPONSE);
     }

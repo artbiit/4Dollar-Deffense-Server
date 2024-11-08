@@ -11,8 +11,7 @@ import makeNotification from './makeNotification.js';
  * @param {MonsterData} monsters
  * @returns
  */
-export const stateSyncNotification = async (user) => {
-  console.log('user: ', user);
+export const stateSyncNotification = (user) => {
   const {
     userId,
     userGold,

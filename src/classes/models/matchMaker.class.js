@@ -94,6 +94,7 @@ class MatchMaker {
         }
       }
     } catch (error) {
+      console.log(error);
       logger.error(`MatchMaker. ${error}`);
     }
   };
