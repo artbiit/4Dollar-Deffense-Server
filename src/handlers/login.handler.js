@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import configs from '../configs/configs.js';
 import { GlobalFailCode } from '../constants/handlerIds.js';
 import { cacheUserToken, findUserByIdPw } from '../db/user/user.db.js';
+import { handleError } from '../utils/error/errorHandler.js';
 import Result from './result.js';
 
 // 환경 변수에서 설정 불러오기
@@ -52,7 +53,7 @@ export const loginRequestHandler = async ({ payload }) => {
     success = false;
     message = '로그인 과정 중 문제가 발생했습니다.';
     failCode = GlobalFailCode.UNKNOWN_ERROR;
-    logger.error(`loginRequestHandler Error: ${error.message}`);
+    handleError(PacketType.LOGIN_REQUEST, error);
   }
 
   return new Result({ success, message, token, failCode }, PacketType.LOGIN_RESPONSE);
