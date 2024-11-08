@@ -1,6 +1,5 @@
 import { addMonsterToGameSession, getGameSessionBySocket } from '../../session/game.session.js';
 import { getUserBySocket } from '../../session/user.session.js';
-import { stateSyncNotification } from '../../utils/notification/stateSync.notification.js';
 import CustomError from '../../utils/error/customError.js';
 import { ErrorCodes } from '../../utils/error/errorCodes.js';
 import { handleError } from '../../utils/error/errorHandler.js';
@@ -32,23 +31,16 @@ export const spawnMonsterRequestHandler = ({ socket, payload }) => {
 
     // 몬스터 스폰 응답 패킷 전송(S2CSpawnMonsterResponse)
     if (monsterId) {
-      console.log(`몬스터 추가 됨 : ${monsterId}`);
-
       // 상대 몬스터 Notification 패킷 전송(S2CSpawnEnemymonsterNotification)
       const notification = monsterSpawnNotification(monsterId, monsterNumber, user);
 
       const opponentUser = game.getOpponent(user.id);
       opponentUser.user.socket.write(notification);
 
-      // // 상태동기화
-      // const stateSyncOpponentUser = game.getOpponent(user.id);
-      // stateSyncOpponentUser.user.socket.write(stateSyncNotification(game.getPlayerData(user.id)));
-
       return new Result({ monsterId, monsterNumber }, PacketType.SPAWN_MONSTER_RESPONSE);
     }
   } catch (error) {
-    //handleError(PacketType.SPAWN_MONSTER_REQUEST, error);
-    console.error(error);
+    handleError(PacketType.SPAWN_MONSTER_REQUEST, error);
   }
 };
 /* message S2CSpawnMonsterResponse {

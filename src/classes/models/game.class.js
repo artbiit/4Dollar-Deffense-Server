@@ -30,7 +30,6 @@ class Game {
     this.state = 'waiting'; // 'waiting', 'in_progress'
 
     this.monsterSpawnInterval = 1000;
-
   }
 
   addUser(user) {
@@ -39,7 +38,6 @@ class Game {
     }
 
     const bases = getGameAsset(ASSET_TYPE.BASE);
-
 
     this.users.length++;
     this.users[user.id] = {
