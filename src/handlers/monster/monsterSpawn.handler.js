@@ -1,10 +1,24 @@
 import { addMonsterToGameSession } from '../../session/game.session.js';
+import { getGameSessionByUser } from '../../session/game.session.js';
+import { stateSyncNotification } from '../../utils/notification/stateSync.notification.js';
 import config from '../../configs/configs.js';
 import Result from '../result.js';
 
 const { PacketType } = config;
 
 export const spawnMonsterRequestHandler = ({ socket, payload }) => {
+  // 검증: 유저가 존재함
+  const user = getUserBySocket(socket);
+  if (!user) {
+    console.log('유저를 찾을 수 없습니다.');
+  }
+
+  // 검증: 유저가 게임에 참가함
+  const gameSession = getGameSessionByUser(user);
+  if (!gameSession) {
+    throw new CustomError(ErrorCodes.USER_NOT_IN_GAME, '유저가 플레이중인 게임이 없습니다.');
+  }
+
   // 1~5 사이의 monsterNumber 생성
   const monsterNumber = Math.floor(Math.random() * 5) + 1;
 
@@ -13,6 +27,11 @@ export const spawnMonsterRequestHandler = ({ socket, payload }) => {
 
   if (monsterId) {
     console.log(`몬스터 추가 됨 : ${monsterId}`);
+
+    // 상태동기화
+    const stateSyncOpponentSocket = gameSession.getOpponent(user.id);
+    stateSyncOpponentSocket.write(stateSyncNotification(gameSession.getPlayerData(user.id)));
+
     const result = new Result({ monsterId, monsterNumber }, PacketType.SPAWN_MONSTER_RESPONSE);
     return result;
   }

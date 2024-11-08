@@ -5,6 +5,7 @@ import { ErrorCodes } from '../../utils/error/errorCodes.js';
 import { handleError } from '../../utils/error/errorHandler.js';
 import configs from '../../configs/configs.js';
 import { createAddEnemyTowerNotification } from '../../utils/notification/tower.notification.js';
+import { stateSyncNotification } from '../../utils/notification/stateSync.notification.js';
 import Result from '../result.js';
 
 const { PacketType } = configs;
@@ -51,6 +52,10 @@ const towerPurchaseHandler = ({ socket, payload }) => {
     // 타워 설치 응답 패킷 전송
     const towerPurchaseResponseData = { towerId: tower.instanceId };
     const result = new Result(towerPurchaseResponseData, PacketType.TOWER_PURCHASE_RESPONSE);
+
+    // 상태동기화
+    const stateSyncOpponentSocket = gameSession.getOpponent(user.id);
+    stateSyncOpponentSocket.write(stateSyncNotification(gameSession.getPlayerData(user.id)));
     return result;
   } catch (error) {
     handleError(PacketType.TOWER_PURCHASE_REQUEST, error);

@@ -212,6 +212,7 @@ class Game {
     const bases = getGameAsset(ASSET_TYPE.BASE);
     const user = gameUser.user;
     return {
+      id: userId,
       gold: gameUser.gold,
       base: {
         hp: bases.data[0].maxHp,
