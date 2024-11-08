@@ -1,6 +1,7 @@
 import { getRedis } from '../redis.js';
 import configs from '../../configs/configs.js';
 import logger from '../../utils/logger.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const { REDIS_MATCH_REQUEST_CHANNEL } = configs;
 
@@ -10,9 +11,9 @@ const { REDIS_MATCH_REQUEST_CHANNEL } = configs;
 // const MATCH_SCORE_KEY = 'match_scores';
 
 /**매치메이킹 대기열 키*/
-const WAITING_KEY = 'match_queue_1_test242';
+const WAITING_KEY = `match_queue_${uuidv4()}`;
 /** 매치메이킹 점수 정렬 키 */
-const MATCH_SCORE_KEY = 'match_scores_test242';
+const MATCH_SCORE_KEY = `match_scores_${uuidv4()}`;
 
 /**매치메이킹 등록 함수 */
 export const enqueueMatchMaking = async (userId, bestScore) => {
