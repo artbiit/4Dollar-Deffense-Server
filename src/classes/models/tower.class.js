@@ -1,15 +1,15 @@
-import { v4 as uuidv4 } from 'uuid';
 import { getRandomGameAsset } from '../../utils/asset/getAssets.js';
 import { ASSET_TYPE } from '../../constants/assets.js';
 
 class Tower {
   /**
-   * @param {{x: Number, y: Number}} coord 설치할 좌표
+   * @param {number} instanceId 타워를 구분하기 위한 개체 ID
+   * @param {{x: Number, y: Number}} coords 설치할 좌표
    */
-  constructor(coords) {
+  constructor(instanceId, coords) {
     const towerData = getRandomGameAsset(ASSET_TYPE.TOWER);
     this.assetId = towerData.id;
-    this.instanceId = uuidv4();
+    this.instanceId = instanceId;
 
     this.x = coords.x;
     this.y = coords.y;

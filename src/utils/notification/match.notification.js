@@ -1,9 +1,8 @@
-import { getGameAssets } from '../../init/loadAssets.js';
-import makeNotification from './makeNotification.js';
+import { getGameAsset } from '../asset/getAssets.js';
 import configs from '../../configs/configs.js';
 import logger from '../logger.js';
 import { createResponse } from '../response/createResponse.js';
-const { PacketType } = configs;
+const { PacketType, ASSET_TYPE } = configs;
 /**
  * message S2CMatchStartNotification {
     InitialGameState initialGameState = 1;
@@ -41,7 +40,8 @@ export const matchSuccessNotification = async (gameSession) => {
   try {
     const users = gameSession.users;
 
-    const { bases, towers } = getGameAssets();
+    const bases = getGameAsset(ASSET_TYPE.BASE);
+    const towers = getGameAsset(ASSET_TYPE.TOWER);
     const initialGameState = {
       baseHp: bases.data[0].maxHp,
       towerCost: towers.data[0].Cost,

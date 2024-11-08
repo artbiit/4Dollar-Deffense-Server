@@ -1,6 +1,6 @@
 import configs from '../../configs/configs.js';
 import logger from '../../utils/logger.js';
-import { getRedis, getSubscriberRedis } from '../../db/redis.js';
+import { getSubscriberRedis } from '../../db/redis.js';
 import {
   dequeueMatchMaking,
   getQueueCount,
@@ -59,7 +59,7 @@ class MatchMaker {
         const rangeUsers = await GetUsersByScoreRange(userScore - range, userScore + range, 5);
         if (rangeUsers) {
           let closestUser = null;
-          let minSocreDiff = Infinity;
+          let minScoreDiff = Infinity;
           for (let i = 0; i < rangeUsers.length; i += 2) {
             const rUserId = rangeUsers[i];
             const rUser = getUserById(rUserId);
@@ -69,8 +69,8 @@ class MatchMaker {
             const rScore = Number(rangeUsers[i + 1]);
             const scoreDiff = Math.abs(userScore - rScore);
 
-            if (scoreDiff < minSocreDiff) {
-              minSocreDiff = scoreDiff;
+            if (scoreDiff < minScoreDiff) {
+              minScoreDiff = scoreDiff;
               closestUser = rUser;
             }
           }

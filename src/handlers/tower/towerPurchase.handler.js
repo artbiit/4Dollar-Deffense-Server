@@ -1,5 +1,4 @@
 import { getGameSessionByUser } from '../../session/game.session.js';
-import Tower from '../../classes/models/tower.class.js';
 import { getUserBySocket } from '../../session/user.session.js';
 import CustomError from '../../utils/error/customError.js';
 import { ErrorCodes } from '../../utils/error/errorCodes.js';
@@ -36,8 +35,7 @@ const towerPurchaseHandler = ({ socket, payload }) => {
     // INCOMPLETE: 타워 위치 (설치할 수 있는 곳인가? 다른 타워와 겹치는가?) 검증 필요
     // INCOMPLETE: 골드가 충분한지 검증 필요
 
-    const tower = new Tower({ x, y });
-    gameSession.addTower(user, tower);
+    const tower = gameSession.addTower(user.id, { x, y });
 
     // 검증: 상대방 유저가 존재함
     const opponent = gameSession.getOpponent(user.id);
