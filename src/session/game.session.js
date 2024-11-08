@@ -25,15 +25,12 @@ export const getGameSession = (id) => {
 };
 
 export const addMonsterToGameSession = (socket, monsterNumber) => {
-  console.log('4444444-1');
   const session = getGameSession(socket);
-  console.log('4444444-2');
   const user = getUserBySocket(socket);
-  console.log('4444444-3');
   if (session && user) {
     return session.addMonster(user.id, monsterNumber);
   }
-  console.log('4444444-4');
+
   logger.error(
     `addMonsterToGameSession. failed add Monster : [${session.id}][${user.id}] => ${monsterNumber}`,
   );
