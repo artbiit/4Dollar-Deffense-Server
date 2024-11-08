@@ -9,7 +9,6 @@ import configs from '../../configs/configs.js';
  */
 export const createAddEnemyTowerNotification = (user, tower) => {
   const packetType = configs.PacketType.ADD_ENEMY_TOWER_NOTIFICATION;
-  const { towerId, x, y } = tower;
-  const payload = { towerId, x, y };
-  return makeNotification(packetType, user, payload);
+  const payload = { towerId: tower.instanceId, x: tower.x, y: tower.y };
+  return makeNotification(packetType, payload, user);
 };

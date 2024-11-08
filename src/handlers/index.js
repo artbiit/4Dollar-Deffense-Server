@@ -3,11 +3,14 @@ import CustomError from '../utils/error/customError.js';
 import { ErrorCodes } from '../utils/error/errorCodes.js';
 import { registerRequestHandler } from './register.handler.js';
 import { loginRequestHandler } from './login.handler.js';
-import {monsterAttackBaseRequestHandler, towerAttackRequestHandler} from "./attack/attack.handler.js";
+import {
+  monsterAttackBaseRequestHandler,
+  towerAttackRequestHandler,
+} from './attack/attack.handler.js';
 import { matchRequestHandler } from './matchRequest.handler.js';
 import towerPurchaseHandler from './tower/towerPurchase.handler.js';
 import { spawnMonsterRequestHandler } from './monster/monsterSpawn.handler.js';
-
+import monsterDeathHandler from './monster/monsterDeath.handler.js';
 
 const { PacketType } = configs;
 
@@ -108,7 +111,7 @@ const handlers = {
     fieldName: 'gameEndRequest',
   },
   [PacketType.MONSTER_DEATH_NOTIFICATION]: {
-    handler: undefined,
+    handler: monsterDeathHandler,
     protoType: 'C2SMonsterDeathNotification',
     fieldName: 'monsterDeathNotification',
   },

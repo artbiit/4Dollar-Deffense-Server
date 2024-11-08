@@ -27,9 +27,10 @@ class Game {
 
     this.intervalManager = new IntervalManager();
     this.monsterLevel = 1;
-    this.state = 'waiting'; // 'waiting', 'inProgress'
+    this.state = 'waiting'; // 'waiting', 'in_progress'
 
     this.monsterSpawnInterval = 1000;
+
   }
 
   addUser(user) {
@@ -38,6 +39,7 @@ class Game {
     }
 
     const bases = getGameAsset(ASSET_TYPE.BASE);
+
 
     this.users.length++;
     this.users[user.id] = {
@@ -49,6 +51,7 @@ class Game {
     };
 
     gamesJoinedbyUsers.set(user, this);
+
     this.intervalManager.addPlayer(user.id, user.ping.bind(user), 1000);
     if (this.users.length == GAME_MAX_PLAYER) {
       setTimeout(() => {
